@@ -13,7 +13,7 @@ class PokemonRepositoryImpl implements PokemonRepository {
   @override
   Future<Either<Exception, List<PokemonDto>>> getPokemons() {
     // if(contectado){
-    return Future.value(Left(Exception()));
+    return pokemonRemoteDataSource.getPokemons();
     // }
   }
 

@@ -1,4 +1,5 @@
 import 'package:pokedex_app/layers/data/dto/pokemon_dto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PokemonLocalDataSource {
   /// Pokemons List that comes from api
@@ -15,6 +16,10 @@ abstract class PokemonLocalDataSource {
 }
 
 class PokemonLocalDataSourceImpl implements PokemonLocalDataSource {
+  final SharedPreferences _sharedPref;
+
+  PokemonLocalDataSourceImpl({required SharedPreferences sharedPreferences}) : _sharedPref = sharedPreferences;
+
   @override
   Future<bool> savePokemonsList({required List<PokemonDto> pokemonsList}) {
     // TODO: implement savePokemonsList

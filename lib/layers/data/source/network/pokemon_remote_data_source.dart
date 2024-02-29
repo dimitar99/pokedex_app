@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:pokedex_app/layers/data/dto/pokemon_dto.dart';
 
 abstract class PokemonRemoteDataSource {
+  /// Returns the list of pokemons from the api
   Future<Either<Exception, List<PokemonDto>>> getPokemons();
+  /// Return the detail of a pokemon by id
   Future<Either<Exception, PokemonDto>> getPokemon(int id);
 }
 
@@ -19,10 +23,12 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         response.data['results'].forEach((pokemon) {
           listOfPokemons.add(PokemonDto.fromJson(pokemon));
         });
-      } on Error catch (_) {
+        log('successfully loaded -> [${listOfPokemons.length}]');
+        return right(listOfPokemons);
+      } on Error catch (e) {
+        log('incorrect $e');
         return left(Exception());
       }
-      return right(listOfPokemons);
     }
     // Para cualquier excepcion de Dio
     on DioException catch (_) {

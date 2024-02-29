@@ -24,7 +24,7 @@ class PokemonDto {
   factory PokemonDto.fromJson(Map<String, dynamic> json) => PokemonDto(
         id: json['id'],
         name: json['name'] ?? '',
-        photo: json['sprites']['front_default'], //
+        photo: json['sprites'] != null && json['sprites']['front_default'] != null ? json['sprites']['front_default'] : null,
         height: json['height'],
         weight: json['weight'],
         types: json['types'] == null

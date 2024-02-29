@@ -7,15 +7,15 @@ class PokemonUseCase{
 
   PokemonUseCase({required this.pokemonRepository});
 
-  Future<Either<Exception, List<PokemonDto>>> getPokemons() {
+  Future<Either<Exception, List<PokemonDto>>> callPokemons() {
     return pokemonRepository.getPokemons();
   }
 
-  Future<Either<Exception, List<PokemonDto>>> getCapturedPokemons() {
+  Future<Either<Exception, List<PokemonDto>>> callCapturedPokemons() {
     return pokemonRepository.getCapturedPokemons();
   }
 
-  Future<Either<Exception, PokemonDto>> getPokemon(int id) {
+  Future<Either<Exception, PokemonDto>> callPokemon(int id) {
     return pokemonRepository.getPokemon(id);
   }
 }

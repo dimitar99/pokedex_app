@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/widgets/captured_pokemons_list.dart';
 import 'package:pokedex_app/layers/presentation/features/home-page/widgets/pokemon_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,10 +15,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    listOfPages = const [
-      PokemonList(title: 'Pokedex'),
-      PokemonList(title: 'Captured'),
-    ];
+    listOfPages = const [PokemonsList(), CapturedPokemonsList()];
     super.initState();
   }
 
