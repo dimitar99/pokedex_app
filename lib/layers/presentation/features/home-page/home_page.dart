@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pokedex_app/core/providers/theme_provider/theme_provider.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/captured-pokemons-list/bloc/captured_pokemons_bloc.dart';
 import 'package:pokedex_app/layers/presentation/features/home-page/captured-pokemons-list/view/captured_pokemons_list.dart';
-import 'package:pokedex_app/layers/presentation/features/home-page/pokemons-list/view/pokemon_list.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/pokemons-list/bloc/pokemons_bloc.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/pokemons-list/view/pokemons_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,12 +14,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  // Page Controller instance
   final PageController _pageController = PageController();
+
+  // List of pages
   List<Widget> listOfPages = [];
+
+  // Bloc instaces
+  late PokemonsBloc _pokemonsBloc;
+  late CapturedPokemonsBloc _capturedPokemonsBloc;
+
+  // Theme Provider instance
+  late ThemeProvider _themeProvider;
 
   @override
   void initState() {
-    listOfPages = const [PokemonsList(), CapturedPokemonsList()];
+    _pokemonsBloc = context.read<PokemonsBloc>();
+    _capturedPokemonsBloc = context.read<CapturedPokemonsBloc>();
+    _themeProvider = context.read<ThemeProvider>();
+
+    _pokemonsBloc.add(const LoadPokemonsUseCaseAction());
+    _capturedPokemonsBloc.add(LoadCapturedPokemonsUseCaseAction(themeProvider: _themeProvider));
+
+    listOfPages = const [
+      PokemonsList(),
+      CapturedPokemonsList(),
+    ];
     super.initState();
   }
 
@@ -28,11 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Pokedex'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Pokedex'), centerTitle: true),
       body: PageView(
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),

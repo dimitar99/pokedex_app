@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pokedex_app/core/providers/theme_provider/theme_provider.dart';
 import 'package:pokedex_app/layers/data/dto/pokemon/pokemon_dto.dart';
 import 'package:pokedex_app/layers/presentation/features/home-page/captured-pokemons-list/bloc/captured_pokemons_bloc.dart';
 import 'package:pokedex_app/layers/presentation/features/pokemon-detail/view/pokemon_detail_page.dart';
@@ -26,11 +27,14 @@ class _CapturedPokemonsListState extends State<CapturedPokemonsList> with Automa
   // Switch value
   bool switchValue = false;
 
+  // Theme Provider instance
+  late ThemeProvider _themeProvider;
+
   @override
   void initState() {
     _capturedPokemonsBloc = context.read<CapturedPokemonsBloc>();
-    _capturedPokemonsBloc.add(const LoadCapturedPokemonsUseCaseAction());
     dropDownValue = _capturedPokemonsBloc.pokemonTypes.first;
+    _themeProvider = context.read<ThemeProvider>();
     super.initState();
   }
 
@@ -61,7 +65,7 @@ class _CapturedPokemonsListState extends State<CapturedPokemonsList> with Automa
       children: [
         const Text('An error ocurred'),
         ElevatedButton(
-          onPressed: () => _capturedPokemonsBloc.add(const LoadCapturedPokemonsUseCaseAction()),
+          onPressed: () => _capturedPokemonsBloc.add(LoadCapturedPokemonsUseCaseAction(themeProvider: _themeProvider)),
           child: const Text('Retry'),
         ),
       ],

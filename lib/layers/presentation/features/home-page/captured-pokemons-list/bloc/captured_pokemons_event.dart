@@ -5,7 +5,8 @@ sealed class CapturedPokemonsEvent {
 }
 
 class LoadCapturedPokemonsUseCaseAction extends CapturedPokemonsEvent {
-  const LoadCapturedPokemonsUseCaseAction();
+  final ThemeProvider themeProvider;
+  const LoadCapturedPokemonsUseCaseAction({required this.themeProvider});
 }
 
 class FilterCapturedPokemonsUseCaseAction extends CapturedPokemonsEvent {

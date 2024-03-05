@@ -12,5 +12,6 @@ class LoadPokemonUseCaseAction extends PokemonEvent {
 class CaptureOrReleasePokemonUseCaseAction extends PokemonEvent {
   final String url;
   final CapturedPokemonsBloc capturedPokemonsBloc;
-  const CaptureOrReleasePokemonUseCaseAction({required this.url, required this.capturedPokemonsBloc});
+  final ThemeProvider themeProvider;
+  const CaptureOrReleasePokemonUseCaseAction({required this.url, required this.capturedPokemonsBloc, required this.themeProvider});
 }

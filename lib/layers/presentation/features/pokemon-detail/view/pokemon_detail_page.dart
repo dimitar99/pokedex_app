@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pokedex_app/core/providers/theme_provider/theme_provider.dart';
 import 'package:pokedex_app/layers/data/dto/pokemon/pokemon_dto.dart';
 import 'package:pokedex_app/layers/presentation/features/home-page/captured-pokemons-list/bloc/captured_pokemons_bloc.dart';
 import 'package:pokedex_app/layers/presentation/features/pokemon-detail/bloc/pokemon_detail_bloc.dart';
@@ -21,19 +22,23 @@ class _PokemonDetailState extends State<PokemonDetail> {
   // Pokemon Dto instance
   late PokemonDto _pokemon;
 
+  // Theme Provider instance
+  late ThemeProvider _themeProvider;
+
   @override
   void initState() {
     _pokemonDetailBloc = context.read<PokemonDetailBloc>();
     _pokemonDetailBloc.add(LoadPokemonUseCaseAction(id: widget.pokemonId));
-
     _capturedPokemonsBloc = context.read<CapturedPokemonsBloc>();
+    _pokemon = _pokemonDetailBloc.pokemon;
+    _themeProvider = context.read<ThemeProvider>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalle de pokemon'), centerTitle: true),
+      appBar: AppBar(title: const Text('Detail page'), centerTitle: true),
       body: BlocConsumer<PokemonDetailBloc, PokemonDetailState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -98,7 +103,7 @@ class _PokemonDetailState extends State<PokemonDetail> {
     return Image.network(
       pokemon.sprites?.frontDefault ?? '',
       width: 100,
-      errorBuilder: (context, error, stackTrace) => const Text('Ha ocurrido un error al cargar la imagen'),
+      errorBuilder: (context, error, stackTrace) => const Text('Something went wrong while loading the image'),
     );
   }
 
@@ -114,8 +119,14 @@ class _PokemonDetailState extends State<PokemonDetail> {
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 24.0),
       child: ElevatedButton(
-        onPressed: () => _pokemonDetailBloc.add(CaptureOrReleasePokemonUseCaseAction(url: widget.pokemonUrl, capturedPokemonsBloc: _capturedPokemonsBloc)),
-        child: Text(_pokemonDetailBloc.isCaptured ? 'Liberar pokemon' : 'Capturar pokemon'),
+        onPressed: () => _pokemonDetailBloc.add(
+          CaptureOrReleasePokemonUseCaseAction(
+            url: widget.pokemonUrl,
+            capturedPokemonsBloc: _capturedPokemonsBloc,
+            themeProvider: _themeProvider,
+          ),
+        ),
+        child: Text('${_pokemonDetailBloc.isCaptured ? 'Release' : 'Capture'} pokemon'),
       ),
     );
   }

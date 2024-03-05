@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:pokedex_app/core/services/dio-interceptor/dio_interceptor.dart';
 import 'package:pokedex_app/layers/data/dto/pokemon/pokemon_dto.dart';
+import 'package:pokedex_app/layers/presentation/shared/constants/constants.dart';
 
 abstract class PokemonRemoteDataSource {
   /// Returns the list of pokemons from the api
@@ -13,13 +15,11 @@ abstract class PokemonRemoteDataSource {
 }
 
 class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
-
   @override
   Future<Either<Exception, List<PokemonDto>>> getPokemons() async {
-    log('PokemonRemoteDataSourceImpl -> getPokemons()');
     try {
       Response response;
-      response = await Dio().get('https://pokeapi.co/api/v2/pokemon?limit=151');
+      response = await DioInterceptor().request().get('${Constants.baseUrl}/pokemon?limit=151');
 
       List<PokemonDto> listOfPokemons = [];
       try {
@@ -28,16 +28,15 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         });
         log('successfully loaded -> [${listOfPokemons.length}] pokemons');
         return right(listOfPokemons);
-      } on Error catch (e) {
-        log('incorrect $e');
+      } on Error catch (_) {
         return left(Exception());
       }
     }
-    // Para cualquier excepcion de Dio
+    // For any Dio exception
     on DioException catch (_) {
       return left(Exception());
     }
-    // Para cualquier otra excepcion
+    // For any other exception
     on Error catch (_) {
       return left(Exception());
     }
@@ -45,10 +44,9 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
 
   @override
   Future<Either<Exception, PokemonDto>> getPokemon(int id) async {
-    log('PokemonRemoteDataSourceImpl -> getPokemon()');
     try {
       Response response;
-      response = await Dio().get('https://pokeapi.co/api/v2/pokemon/$id');
+      response = await DioInterceptor().request().get('${Constants.baseUrl}/pokemon/$id');
 
       PokemonDto? pokemon;
       try {
@@ -56,13 +54,13 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
       } on Error catch (_) {
         return left(Exception());
       }
-      return right(pokemon.copyWith(url: 'https://pokeapi.co/api/v2/pokemon/$id'));
+      return right(pokemon.copyWith(url: '${Constants.baseUrl}/pokemon/$id'));
     }
-    // Para cualquier excepcion de Dio
+    // For any Dio exception
     on DioException catch (_) {
       return left(Exception());
     }
-    // Para cualquier otra excepcion
+    // For any other exception
     on Error catch (_) {
       return left(Exception());
     }

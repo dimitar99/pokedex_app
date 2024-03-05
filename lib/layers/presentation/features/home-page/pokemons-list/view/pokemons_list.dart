@@ -26,7 +26,6 @@ class _PokemonsListState extends State<PokemonsList> with AutomaticKeepAliveClie
   @override
   void initState() {
     _pokemonsBloc = context.read<PokemonsBloc>();
-    _pokemonsBloc.add(const LoadPokemonsUseCaseAction());
     super.initState();
   }
 
@@ -79,7 +78,7 @@ class _PokemonsListState extends State<PokemonsList> with AutomaticKeepAliveClie
       child: TextFormField(
         controller: _searchFieldController,
         decoration: InputDecoration(
-          label: const Text('Busca un pokemon...'),
+          label: const Text('Search pokemon...'),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
         ),
         onChanged: (value) => _pokemonsBloc.add(FilterPokemonsUseCaseAction(name: value)),
@@ -96,7 +95,7 @@ class _PokemonsListState extends State<PokemonsList> with AutomaticKeepAliveClie
         itemBuilder: (context, index) {
           PokemonDto pokemon = _pokemonsBloc.listOfPokemons[index];
           return ListTile(
-            title: Text(pokemon.name.isEmpty ? 'Sin nombre' : pokemon.name),
+            title: Text(pokemon.name.isEmpty ? 'Without name' : pokemon.name),
             onTap: () {
               log(pokemon.toRawJson());
               if (pokemon.url.isNotEmpty) {

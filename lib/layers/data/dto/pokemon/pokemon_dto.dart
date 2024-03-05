@@ -23,7 +23,7 @@ class PokemonDto extends Pokemon {
 
   factory PokemonDto.fromJson(Map<String, dynamic> json) => PokemonDto(
         id: json['id'],
-        name: json['name'] ?? 'Sin nombre',
+        name: json['name'] ?? 'Without name',
         sprites: json['sprites'] == null ? null : SpritesDto.fromJson(json['sprites']),
         height: json['height'] ?? 0,
         weight: json['weight'] ?? 0,

@@ -15,7 +15,6 @@ class PokemonRepositoryImpl implements PokemonRepository {
   @override
   Future<Either<Exception, List<PokemonDto>>> getPokemons() async {
     log('PokemonRepositoryImpl -> getPokemons()');
-    // if(contectado){
     return await pokemonRemoteDataSource.getPokemons().then((remoteResult) {
       return remoteResult.fold(
         (exception) async {
@@ -32,9 +31,6 @@ class PokemonRepositoryImpl implements PokemonRepository {
         },
       );
     });
-    // } else{
-    //   return pokemonLocalDataSource.getPokemonsList();
-    // }
   }
 
   @override
@@ -47,7 +43,6 @@ class PokemonRepositoryImpl implements PokemonRepository {
   Future<Either<Exception, PokemonDto>> getPokemon(int id) async {
     log('PokemonRepositoryImpl -> getPokemon()');
     bool isCaptured = false;
-    // if(contectado){
     return await pokemonRemoteDataSource.getPokemon(id).then((remoteResult) {
       return remoteResult.fold(
         (exception) async {
@@ -79,9 +74,6 @@ class PokemonRepositoryImpl implements PokemonRepository {
         },
       );
     });
-    // } else{
-    //   return pokemonLocalDataSource.getPokemon(id: id);
-    // }
   }
 
   @override
