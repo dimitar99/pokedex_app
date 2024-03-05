@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex_app/layers/presentation/features/home-page/widgets/captured_pokemons_list.dart';
-import 'package:pokedex_app/layers/presentation/features/home-page/widgets/pokemon_list.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/captured-pokemons-list/view/captured_pokemons_list.dart';
+import 'package:pokedex_app/layers/presentation/features/home-page/pokemons-list/view/pokemon_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

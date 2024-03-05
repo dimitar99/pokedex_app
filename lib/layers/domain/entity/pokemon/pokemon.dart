@@ -1,17 +1,24 @@
+import 'package:pokedex_app/layers/domain/entity/pokemon_type/pokemon_type.dart';
+import 'package:pokedex_app/layers/domain/entity/sprites/sprites.dart';
+
 class Pokemon {
   int? id;
-  String? name;
-  String? photo;
+  String name;
+  Sprites? sprites;
   int? height;
   int? weight;
-  List<String> types;
+  List<PokemonType> types;
+  String url;
+  bool isCaptured;
 
   Pokemon({
     required this.id,
     required this.name,
-    required this.photo,
+    required this.sprites,
     required this.height,
     required this.weight,
     required this.types,
+    required this.url,
+    this.isCaptured = false,
   });
 }

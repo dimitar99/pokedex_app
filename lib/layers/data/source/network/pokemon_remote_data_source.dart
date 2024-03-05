@@ -2,18 +2,21 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:pokedex_app/layers/data/dto/pokemon_dto.dart';
+import 'package:pokedex_app/layers/data/dto/pokemon/pokemon_dto.dart';
 
 abstract class PokemonRemoteDataSource {
   /// Returns the list of pokemons from the api
   Future<Either<Exception, List<PokemonDto>>> getPokemons();
+
   /// Return the detail of a pokemon by id
   Future<Either<Exception, PokemonDto>> getPokemon(int id);
 }
 
 class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
+
   @override
   Future<Either<Exception, List<PokemonDto>>> getPokemons() async {
+    log('PokemonRemoteDataSourceImpl -> getPokemons()');
     try {
       Response response;
       response = await Dio().get('https://pokeapi.co/api/v2/pokemon?limit=151');
@@ -23,7 +26,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         response.data['results'].forEach((pokemon) {
           listOfPokemons.add(PokemonDto.fromJson(pokemon));
         });
-        log('successfully loaded -> [${listOfPokemons.length}]');
+        log('successfully loaded -> [${listOfPokemons.length}] pokemons');
         return right(listOfPokemons);
       } on Error catch (e) {
         log('incorrect $e');
@@ -42,6 +45,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
 
   @override
   Future<Either<Exception, PokemonDto>> getPokemon(int id) async {
+    log('PokemonRemoteDataSourceImpl -> getPokemon()');
     try {
       Response response;
       response = await Dio().get('https://pokeapi.co/api/v2/pokemon/$id');
@@ -52,7 +56,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
       } on Error catch (_) {
         return left(Exception());
       }
-      return right(pokemon);
+      return right(pokemon.copyWith(url: 'https://pokeapi.co/api/v2/pokemon/$id'));
     }
     // Para cualquier excepcion de Dio
     on DioException catch (_) {
